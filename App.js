@@ -1,20 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Row } from 'react-bootstrap';
 
 export default function App() {
   return (
     <View style={styles.container}>
-    <ListGroup>
-      <ListGroup.Item>Cras justo odio</ListGroup.Item>
-      <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-      <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-      <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-    </ListGroup>
-        </View>
+      <Row Style={styles.titulo}>Lista de tareas</Row>
+    </View>
   );
 }
+
 
 
 const styles = StyleSheet.create({
@@ -24,4 +20,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  titulo: {
+  
+  },
 });
+
