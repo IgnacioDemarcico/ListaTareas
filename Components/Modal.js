@@ -1,8 +1,9 @@
+import { StyleSheet, Text, View,Image } from 'react-native';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
-function StaticExample() {
+export default function StaticExample() {
   return (
     <div
       className="modal show"
@@ -26,4 +27,10 @@ function StaticExample() {
   );
 }
 
-export default StaticExample;
+const styles = StyleSheet.create({
+texto:{
+  fontSize:"15px",
+  color:"black",
+  display:"flex"
+}
+});
