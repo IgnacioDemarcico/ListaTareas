@@ -1,19 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import ListGroup from 'react-bootstrap/ListGroup';
+import React from 'react';
 import { Row } from 'react-bootstrap';
-
+import { View, StyleSheet } from 'react-native';
+import Lista from './components/Lista';
 
 export default function App() {
   return (
     <View style={styles.container}>
     <Row style={styles.titulo}>Lista de tareas</Row>
-
+      <Lista/>
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -22,10 +19,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titulo: {
-  marginTop: '25px',
-  fontSize:'30px',
-  fontWeight: 'bold',
-  fontFamily: 'sans-serif',
+    marginTop: '25px',
+    marginBottom: '50px',
+    fontWeight: 'Bold',
+    fontFamily: 'Sans-Serif',
+    fontSize: '30px',
   },
 });
-
