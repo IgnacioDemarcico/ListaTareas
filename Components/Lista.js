@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput, CheckBox } from 'react-native';
 
 const Lista = () => {
   const [data, setData] = useState([
-    { id: '1', text: 'Item 1' },
-    { id: '2', text: 'Item 2' },
-    { id: '3', text: 'Item 3' },
-    { id: '4', text: 'Item 4' },
-    { id: '5', text: 'Item 5' },
+    { id: '1', text: 'Item 1', checked: false },
+    { id: '2', text: 'Item 2', checked: false },
+    { id: '3', text: 'Item 3', checked: false },
+    { id: '4', text: 'Item 4', checked: false },
+    { id: '5', text: 'Item 5', checked: false },
   ]);
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -17,6 +17,7 @@ const Lista = () => {
       const newItem = {
         id: String(data.length + 1),
         text: inputText,
+        checked: false,
       };
       setData([...data, newItem]);
       setInputText('');
@@ -24,11 +25,26 @@ const Lista = () => {
     }
   };
 
+  const handleCheckboxToggle = (itemId) => {
+    const updatedData = data.map((item) =>
+      item.id === itemId ? { ...item, checked: !item.checked } : item
+    );
+    setData(updatedData);
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <Text style={styles.item}>{item.text}</Text>}
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            <CheckBox
+              value={item.checked}
+              onValueChange={() => handleCheckboxToggle(item.id)}
+            />
+            <Text style={styles.itemText}>{item.text}</Text>
+          </View>
+        )}
         keyExtractor={(item) => item.id}
       />
 
@@ -37,6 +53,7 @@ const Lista = () => {
       </TouchableOpacity>
 
       <Modal
+        animationType="none"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -69,11 +86,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  item: {
-    fontSize: 20,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  itemText: {
+    marginLeft: 10,
+    fontSize: 16,
   },
   button: {
     backgroundColor: '#007AFF',
