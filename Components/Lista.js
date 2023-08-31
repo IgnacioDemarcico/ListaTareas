@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput, CheckBox } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { CheckBox } from 'react-native-elements';
 
 const Lista = () => {
   const [data, setData] = useState([
@@ -32,28 +34,43 @@ const Lista = () => {
     setData(updatedData);
   };
 
+  const handleRemoveItem = (itemId) => {
+    const updatedData = data.filter((item) => item.id !== itemId);
+    setData(updatedData);
+  };
+
+  const renderRightActions = (itemId) => {
+    return (
+      <TouchableOpacity style={styles.deleteButton} onPress={() => handleRemoveItem(itemId)}>
+        <Text style={styles.deleteButtonText}>Eliminar</Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
         renderItem={({ item }) => (
-          <View style={styles.listItem}>
-            <CheckBox
-              value={item.checked}
-              onValueChange={() => handleCheckboxToggle(item.id)}
-            />
-            <Text style={styles.itemText}>{item.text}</Text>
-          </View>
+          <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+            <View style={styles.listItem}>
+              <CheckBox
+                checked={item.checked}
+                onPress={() => handleCheckboxToggle(item.id)}
+              />
+              <Text style={styles.itemText}>{item.text}</Text>
+            </View>
+          </Swipeable>
         )}
         keyExtractor={(item) => item.id}
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
-        <Text style={styles.buttonText}>Agregar Item</Text>
+      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+        <Text style={styles.addButtonLabel}>Agregar Item</Text>
       </TouchableOpacity>
 
       <Modal
-        animationType="none"
+        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -82,27 +99,39 @@ const Lista = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#fff',
   },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   itemText: {
-    marginLeft: 10,
     fontSize: 16,
+    marginLeft: 10,
   },
-  button: {
+  deleteButton: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: '100%',
+  },
+  deleteButtonText: {
+    color: 'white',
+  },
+  addButton: {
     backgroundColor: '#007AFF',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginTop: 20,
+    margin: 20,
+    alignSelf: 'center',
   },
-  buttonText: {
+  addButtonLabel: {
     color: '#fff',
     fontSize: 18,
   },
