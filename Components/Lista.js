@@ -1,19 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Lista = () => {
-  const [data, setData] = useState([
-    { id: '1', name: 'Item 1', description: 'Descripción del Item 1', checked: false },
-    { id: '2', name: 'Item 2', description: 'Descripción del Item 2', checked: false },
-    { id: '3', name: 'Item 3', description: 'Descripción del Item 3', checked: false },
-    { id: '4', name: 'Item 4', description: 'Descripción del Item 4', checked: false },
-    { id: '5', name: 'Item 5', description: 'Descripción del Item 5', checked: false },
-  ]);
+  const [data, setData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [inputName, setInputName] = useState('');
   const [inputDescription, setInputDescription] = useState('');
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    saveData();
+  }, [data]);
+
+  const loadData = async () => {
+    try {
+      const storedData = await AsyncStorage.getItem('items');
+      if (storedData !== null) {
+        setData(JSON.parse(storedData));
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
+
+  const saveData = async () => {
+    try {
+      await AsyncStorage.setItem('items', JSON.stringify(data));
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
 
   const handleAddItem = () => {
     if (inputName.trim() !== '' && inputDescription.trim() !== '') {
