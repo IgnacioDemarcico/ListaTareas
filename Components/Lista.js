@@ -5,24 +5,27 @@ import { CheckBox } from 'react-native-elements';
 
 const Lista = () => {
   const [data, setData] = useState([
-    { id: '1', text: 'Item 1', checked: false },
-    { id: '2', text: 'Item 2', checked: false },
-    { id: '3', text: 'Item 3', checked: false },
-    { id: '4', text: 'Item 4', checked: false },
-    { id: '5', text: 'Item 5', checked: false },
+    { id: '1', name: 'Item 1', description: 'Descripción del Item 1', checked: false },
+    { id: '2', name: 'Item 2', description: 'Descripción del Item 2', checked: false },
+    { id: '3', name: 'Item 3', description: 'Descripción del Item 3', checked: false },
+    { id: '4', name: 'Item 4', description: 'Descripción del Item 4', checked: false },
+    { id: '5', name: 'Item 5', description: 'Descripción del Item 5', checked: false },
   ]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputText, setInputText] = useState('');
+  const [inputName, setInputName] = useState('');
+  const [inputDescription, setInputDescription] = useState('');
 
   const handleAddItem = () => {
-    if (inputText.trim() !== '') {
+    if (inputName.trim() !== '' && inputDescription.trim() !== '') {
       const newItem = {
         id: String(data.length + 1),
-        text: inputText,
+        name: inputName,
+        description: inputDescription,
         checked: false,
       };
       setData([...data, newItem]);
-      setInputText('');
+      setInputName('');
+      setInputDescription('');
       setModalVisible(false);
     }
   };
@@ -58,7 +61,10 @@ const Lista = () => {
                 checked={item.checked}
                 onPress={() => handleCheckboxToggle(item.id)}
               />
-              <Text style={styles.itemText}>{item.text}</Text>
+              <View style={styles.itemInfo}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemDescription}>{item.description}</Text>
+              </View>
             </View>
           </Swipeable>
         )}
@@ -79,9 +85,15 @@ const Lista = () => {
           <View style={styles.modalContent}>
             <TextInput
               style={styles.input}
-              placeholder="Escribe el nuevo item"
-              onChangeText={(text) => setInputText(text)}
-              value={inputText}
+              placeholder="Nombre del nuevo item"
+              onChangeText={(text) => setInputName(text)}
+              value={inputName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Descripción del nuevo item"
+              onChangeText={(text) => setInputDescription(text)}
+              value={inputDescription}
             />
             <TouchableOpacity style={styles.modalButton} onPress={handleAddItem}>
               <Text style={styles.modalButtonText}>Agregar</Text>
@@ -109,9 +121,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
-  itemText: {
-    fontSize: 16,
+  itemInfo: {
+    flex: 1,
     marginLeft: 10,
+  },
+  itemName: {
+    fontSize: 16,
+  },
+  itemDescription: {
+    fontSize: 12,
+    color: '#666',
   },
   deleteButton: {
     backgroundColor: 'red',
