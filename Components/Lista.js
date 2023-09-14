@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -64,36 +63,35 @@ const Lista = () => {
     setData(updatedData);
   };
 
-  const renderRightActions = (itemId) => {
-    return (
-      <TouchableOpacity style={styles.deleteButton} onPress={() => handleRemoveItem(itemId)}>
-        <Text style={styles.deleteButtonText}>Eliminar</Text>
-      </TouchableOpacity>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
         renderItem={({ item }) => (
-          <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-            <View style={styles.listItem}>
-              <CheckBox
-                checked={item.checked}
-                onPress={() => handleCheckboxToggle(item.id)}
-              />
-              <View style={styles.itemInfo}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemDescription}>{item.description}</Text>
-              </View>
+          <View style={styles.listItem}>
+            <CheckBox
+              checked={item.checked}
+              onPress={() => handleCheckboxToggle(item.id)}
+            />
+            <View style={styles.itemInfo}>
+              <Text style={styles.itemName}>{item.name}</Text>
+              <Text style={styles.itemDescription}>{item.description}</Text>
             </View>
-          </Swipeable>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => handleRemoveItem(item.id)}
+            >
+              <Text style={styles.deleteButtonText}>Eliminar</Text>
+            </TouchableOpacity>
+          </View>
         )}
         keyExtractor={(item) => item.id}
       />
 
-      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Text style={styles.addButtonLabel}>Agregar Item</Text>
       </TouchableOpacity>
 
@@ -117,10 +115,16 @@ const Lista = () => {
               onChangeText={(text) => setInputDescription(text)}
               value={inputDescription}
             />
-            <TouchableOpacity style={styles.modalButton} onPress={handleAddItem}>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleAddItem}
+            >
               <Text style={styles.modalButtonText}>Agregar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setModalVisible(false)}
+            >
               <Text style={styles.modalButtonText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
@@ -138,6 +142,7 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
@@ -149,17 +154,20 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
+    marginRight: 10,
   },
   itemDescription: {
     fontSize: 12,
     color: '#666',
+    marginRight: 10,
   },
   deleteButton: {
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     width: 80,
-    height: '100%',
+    height: 40,
+    borderRadius: 5,
   },
   deleteButtonText: {
     color: 'white',
